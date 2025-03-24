@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="fullscreen-btn">Fullscreen</button>
+    <div class="controls">
+        <label for="speed-slider">Speed: <span id="speed-value">15</span>s</label>
+        <input type="range" id="speed-slider" min="5" max="30" value="15">
+        <label for="color1">Color 1:</label>
+        <input type="color" id="color1" value="#ff7e5f">
+        <label for="color2">Color 2:</label>
+        <input type="color" id="color2" value="#feb47b">
+    </div>
+
+    <script>
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        const color1Input = document.getElementById('color1');
+        const color2Input = document.getElementById('color2');
+        const body = document.body;
+
+        function updateGradient() {
+            const speed = speedSlider.value;
+            const color1 = color1Input.value;
+            const color2 = color2Input.value;
+            body.style.background = `linear-gradient(270deg, ${color1}, ${color2})`;
+            body.style.backgroundSize = '400% 400%';
+            body.style.animation = `gradientShift ${speed}s ease infinite`;
+            speedValue.textContent = speed;
+        }
+
+        speedSlider.addEventListener('input', updateGradient);
+        color1Input.addEventListener('input', updateGradient);
+        color2Input.addEventListener('input', updateGradient);
+
+        updateGradient();
+    </script>
+</body>
+</html>
