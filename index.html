@@ -29,6 +29,11 @@
         <input type="color" id="color2" value="#feb47b">
         <label for="toggle-animation">Animate Gradient:</label>
         <input type="checkbox" id="toggle-animation" checked>
+        <label for="animation-type">Animation Type:</label>
+        <select id="animation-type">
+            <option value="linear">Linear</option>
+            <option value="radial">Radial</option>
+        </select>
     </div>
 
     <script>
@@ -48,23 +53,33 @@
         const color2Input = document.getElementById('color2');
         const color2Label = document.getElementById('color2-label');
         const toggleAnimation = document.getElementById('toggle-animation');
+        const animationType = document.getElementById('animation-type');
         const body = document.body;
 
         function updateGradient() {
             const speed = speedSlider.value;
             const color1 = color1Input.value;
             const color2 = color2Input.value;
+            const type = animationType.value;
             if (toggleAnimation.checked) {
-                body.style.background = `linear-gradient(270deg, ${color1}, ${color2})`;
+                if (type === 'linear') {
+                    body.style.background = `linear-gradient(270deg, ${color1}, ${color2})`;
+                } else if (type === 'radial') {
+                    body.style.background = `radial-gradient(circle, ${color1}, ${color2})`;
+                }
                 body.style.backgroundSize = '400% 400%';
                 body.style.animation = `gradientShift ${speed}s ease infinite`;
                 color2Input.style.display = 'inline-block';
                 color2Label.style.display = 'inline';
+                animationType.style.display = 'inline-block';
+                document.querySelector('label[for="animation-type"]').style.display = 'inline';
             } else {
                 body.style.background = color1;
                 body.style.animation = 'none';
                 color2Input.style.display = 'none';
                 color2Label.style.display = 'none';
+                animationType.style.display = 'none';
+                document.querySelector('label[for="animation-type"]').style.display = 'none';
             }
             speedValue.textContent = speed;
         }
@@ -73,6 +88,7 @@
         color1Input.addEventListener('input', updateGradient);
         color2Input.addEventListener('input', updateGradient);
         toggleAnimation.addEventListener('change', updateGradient);
+        animationType.addEventListener('change', updateGradient);
 
         updateGradient();
 
