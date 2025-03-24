@@ -21,15 +21,24 @@
     </button>
 
     <div class="controls">
-        <label for="speed-slider">Speed: <span id="speed-value">15</span>s</label>
+        <label for="color-amt">Colors:</label>
+        <select id="color-amt">
+            <option value="one">One</option>
+            <option value="two">Two</option>
+            <option value="three">Three</option>
+            <option value="four">Four</option>
+        </select>
+        <label for="speed-slider" id="speed-label">Speed: <span id="speed-value">15</span>s</label>
         <input type="range" id="speed-slider" min="5" max="30" value="15">
         <label for="color1">Color 1:</label>
         <input type="color" id="color1" value="#ff7e5f">
         <label for="color2" id="color2-label">Color 2:</label>
         <input type="color" id="color2" value="#feb47b">
-        <label for="toggle-animation">Animate Gradient:</label>
-        <input type="checkbox" id="toggle-animation" checked>
-        <label for="animation-type">Animation Type:</label>
+        <label for="color3" id="color3-label">Color 3:</label>
+        <input type="color" id="color3" value="#ff7e5f">
+        <label for="color4" id="color4-label">Color 4:</label>
+        <input type="color" id="color4" value="#feb47b">
+        <label for="animation-type" id="animation-type-label">Animation Type:</label>
         <select id="animation-type">
             <option value="linear">Linear</option>
             <option value="radial">Radial</option>
@@ -48,47 +57,71 @@
         });
 
         const speedSlider = document.getElementById('speed-slider');
+        const speedLabel = document.getElementById('speed-label');
         const speedValue = document.getElementById('speed-value');
         const color1Input = document.getElementById('color1');
         const color2Input = document.getElementById('color2');
+        const color3Input = document.getElementById('color3');
+        const color4Input = document.getElementById('color4');
         const color2Label = document.getElementById('color2-label');
-        const toggleAnimation = document.getElementById('toggle-animation');
+        const color3Label = document.getElementById('color3-label');
+        const color4Label = document.getElementById('color4-label');
         const animationType = document.getElementById('animation-type');
+        const animationTypeLabel = document.getElementById('animation-type-label');
+        const colorAmt = document.getElementById('color-amt');
         const body = document.body;
 
         function updateGradient() {
             const speed = speedSlider.value;
             const color1 = color1Input.value;
             const color2 = color2Input.value;
+            const color3 = color3Input.value;
+            const color4 = color4Input.value;
             const type = animationType.value;
-            if (toggleAnimation.checked) {
+            const colors = [color1];
+
+            if (colorAmt.value === 'two') {
+                colors.push(color2);
+            } else if (colorAmt.value === 'three') {
+                colors.push(color2, color3);
+            } else if (colorAmt.value === 'four') {
+                colors.push(color2, color3, color4);
+            }
+
+            if (colorAmt.value !== 'one') {
                 if (type === 'linear') {
-                    body.style.background = `linear-gradient(270deg, ${color1}, ${color2})`;
+                    body.style.background = `linear-gradient(270deg, ${colors.join(', ')})`;
                 } else if (type === 'radial') {
-                    body.style.background = `radial-gradient(circle, ${color1}, ${color2})`;
+                    body.style.background = `radial-gradient(circle, ${colors.join(', ')})`;
                 }
                 body.style.backgroundSize = '400% 400%';
                 body.style.animation = `gradientShift ${speed}s ease infinite`;
-                color2Input.style.display = 'inline-block';
-                color2Label.style.display = 'inline';
-                animationType.style.display = 'inline-block';
-                document.querySelector('label[for="animation-type"]').style.display = 'inline';
             } else {
                 body.style.background = color1;
                 body.style.animation = 'none';
-                color2Input.style.display = 'none';
-                color2Label.style.display = 'none';
-                animationType.style.display = 'none';
-                document.querySelector('label[for="animation-type"]').style.display = 'none';
             }
+
+            color2Input.style.display = colorAmt.value !== 'one' ? 'inline-block' : 'none';
+            color2Label.style.display = colorAmt.value !== 'one' ? 'inline' : 'none';
+            color3Input.style.display = colorAmt.value === 'three' || colorAmt.value === 'four' ? 'inline-block' : 'none';
+            color3Label.style.display = colorAmt.value === 'three' || colorAmt.value === 'four' ? 'inline' : 'none';
+            color4Input.style.display = colorAmt.value === 'four' ? 'inline-block' : 'none';
+            color4Label.style.display = colorAmt.value === 'four' ? 'inline' : 'none';
+            speedSlider.style.display = colorAmt.value !== 'one' ? 'block' : 'none';
+            speedLabel.style.display = colorAmt.value !== 'one' ? 'block' : 'none';
+            animationType.style.display = colorAmt.value !== 'one' ? 'block' : 'none';
+            animationTypeLabel.style.display = colorAmt.value !== 'one' ? 'block' : 'none';
+
             speedValue.textContent = speed;
         }
 
         speedSlider.addEventListener('input', updateGradient);
         color1Input.addEventListener('input', updateGradient);
         color2Input.addEventListener('input', updateGradient);
-        toggleAnimation.addEventListener('change', updateGradient);
+        color3Input.addEventListener('input', updateGradient);
+        color4Input.addEventListener('input', updateGradient);
         animationType.addEventListener('change', updateGradient);
+        colorAmt.addEventListener('change', updateGradient);
 
         updateGradient();
 
