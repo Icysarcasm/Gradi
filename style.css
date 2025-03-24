@@ -24,7 +24,7 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
@@ -39,10 +39,11 @@ body {
     top: 10px;
     left: 10px;
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px;
-    border-radius: 5px;
+    padding: 30px;
+    border-radius: 15px;
     font-family: Arial, Helvetica, sans-serif;
     transition: background-color 0.3s ease;
+    width: 150px;
 }
 
 .controls:hover {
@@ -59,5 +60,47 @@ body {
 
 .controls input[type="range"],
 .controls input[type="color"] {
-    margin-right: 20px;
+    margin-right: 10px;
+}
+
+#speed-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    background: black;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+
+#speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 10px;
+    background: rgb(84, 84, 84);
+    cursor: pointer;
+}
+
+#speed-slider::-moz-range-thumb {
+    width: 20px;
+    height: 40px;
+    background: rgb(44, 44, 44);
+    cursor: pointer;
+}
+
+#link-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
 }

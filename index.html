@@ -7,14 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="fullscreen-btn">Fullscreen</button>
+    <button id="fullscreen-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4H10V2H2V10H4V4ZM14 2V4H20V10H22V2H14ZM20 20H14V22H22V14H20V20ZM4 20V14H2V22H10V20H4Z" fill="currentColor"/>
+        </svg>
+    </button>
+
+    <!-- New button with SVG linking to another website -->
+    <button id="link-btn" onclick="window.location.href='https://www.example.com';">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="163.556 163.556 172.889 172.888" width="24" height="24">
+            <path d="M 284.928 250 C 284.928 269.29 269.289 284.928 250 284.928 C 230.71 284.928 215.072 269.29 215.072 250 C 215.072 230.71 230.71 215.072 250 215.072 C 269.289 215.072 284.928 230.71 284.928 250 Z M 278.825 192.38 L 250 163.556 L 221.176 192.38 L 213.822 185.16 L 199.514 195.556 L 205.659 207.896 L 193.175 220.382 L 182.618 218.809 L 177.154 235.629 L 177.662 235.894 L 163.556 250 L 177.662 264.106 L 177.154 264.372 L 182.618 281.192 L 193.175 279.619 L 205.659 292.103 L 199.514 304.445 L 213.822 314.84 L 221.176 307.62 L 250 336.444 L 278.825 307.62 L 286.179 314.84 L 300.487 304.445 L 294.34 292.104 L 306.826 279.619 L 317.381 281.192 L 322.846 264.372 L 322.338 264.107 L 336.445 250 L 322.338 235.893 L 322.846 235.629 L 317.381 218.809 L 306.826 220.381 L 294.34 207.896 L 300.487 195.556 L 286.179 185.16 L 278.825 192.38 Z" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); stroke-width: 5.17112px;" />
+        </svg>
+    </button>
+
     <div class="controls">
         <label for="speed-slider">Speed: <span id="speed-value">15</span>s</label>
         <input type="range" id="speed-slider" min="5" max="30" value="15">
         <label for="color1">Color 1:</label>
         <input type="color" id="color1" value="#ff7e5f">
-        <label for="color2">Color 2:</label>
+        <label for="color2" id="color2-label">Color 2:</label>
         <input type="color" id="color2" value="#feb47b">
+        <label for="toggle-animation">Animate Gradient:</label>
+        <input type="checkbox" id="toggle-animation" checked>
     </div>
 
     <script>
@@ -32,23 +46,54 @@
         const speedValue = document.getElementById('speed-value');
         const color1Input = document.getElementById('color1');
         const color2Input = document.getElementById('color2');
+        const color2Label = document.getElementById('color2-label');
+        const toggleAnimation = document.getElementById('toggle-animation');
         const body = document.body;
 
         function updateGradient() {
             const speed = speedSlider.value;
             const color1 = color1Input.value;
             const color2 = color2Input.value;
-            body.style.background = `linear-gradient(270deg, ${color1}, ${color2})`;
-            body.style.backgroundSize = '400% 400%';
-            body.style.animation = `gradientShift ${speed}s ease infinite`;
+            if (toggleAnimation.checked) {
+                body.style.background = `linear-gradient(270deg, ${color1}, ${color2})`;
+                body.style.backgroundSize = '400% 400%';
+                body.style.animation = `gradientShift ${speed}s ease infinite`;
+                color2Input.style.display = 'inline-block';
+                color2Label.style.display = 'inline';
+            } else {
+                body.style.background = color1;
+                body.style.animation = 'none';
+                color2Input.style.display = 'none';
+                color2Label.style.display = 'none';
+            }
             speedValue.textContent = speed;
         }
 
         speedSlider.addEventListener('input', updateGradient);
         color1Input.addEventListener('input', updateGradient);
         color2Input.addEventListener('input', updateGradient);
+        toggleAnimation.addEventListener('change', updateGradient);
 
         updateGradient();
+
+        // Fade out elements after inactivity
+        let timeout;
+        const elements = document.querySelectorAll('#fullscreen-btn, #link-btn, .controls');
+
+        function resetTimer() {
+            clearTimeout(timeout);
+            elements.forEach(el => el.classList.remove('fade-out'));
+            document.body.style.cursor = 'default';
+            timeout = setTimeout(() => {
+                elements.forEach(el => el.classList.add('fade-out'));
+                document.body.style.cursor = 'none';
+            }, 3000); // 3 seconds of inactivity
+        }
+
+        window.addEventListener('mousemove', resetTimer);
+        window.addEventListener('keydown', resetTimer);
+
+        resetTimer();
     </script>
 </body>
 </html>
