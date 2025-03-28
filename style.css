@@ -85,9 +85,9 @@ body {
 }
 
 #speed-slider::-moz-range-thumb {
-    width: 20px;
-    height: 40px;
-    background: rgb(44, 44, 44);
+    width: 15px;
+    height: 10px;
+    background: rgb(84, 84, 84);
     cursor: pointer;
 }
 
